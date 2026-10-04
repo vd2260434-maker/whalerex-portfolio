@@ -1,31 +1,31 @@
-# Dependencies
-node_modules/
-
-# Environment and sensitive files
+# Environment variables and secrets
 .env
 .env.*
-*.local
+!.env.example
+*.env
+*.env.local
 *.pem
 *.key
+*.cert
 
-# Python
+# Vercel & deployments
+.vercel
+.vercel/
+
+# Dependencies & logs
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python & local runtime storage
 __pycache__/
 *.py[cod]
 *$py.class
-*.venv
-venv/
-ENV/
+.local_messages.json
+.local_settings.json
 
-# System and IDE
+# Operating System
 .DS_Store
 Thumbs.db
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Logs
-*.log
-
-# Vercel deployment cache
-.vercel/
+desktop.ini
