@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dinesh — Creative Web Developer & Designer</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+    --cream:#f8f2ea;
+    --cream2:#fffaf5;
+    --peach:#d98f78;
+    --peach-light:#f1d7cb;
+    --sage:#c8c9ad;
+    --dark:#29251f;
+    --muted:#756d64;
+    --border:#e4dcd3;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:var(--cream);
+    color:var(--dark);
+    font-family:Inter,sans-serif;
+    overflow-x:hidden;
+}
+
+a{
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+/* BACKGROUND */
+
+.grid-bg{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-1;
+    opacity:.35;
+
+    background-image:
+        linear-gradient(#29251f0b 1px,transparent 1px),
+        linear-gradient(90deg,#29251f0b 1px,transparent 1px);
+
+    background-size:80px 80px;
+}
+
+/* LOADER & OPENING ANIMATION */
+
+#loader{
+    position:fixed;
+    inset:0;
+    background:var(--cream);
+    z-index:99999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    transition:transform 0.9s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.6s ease;
+    will-change:transform, opacity;
+}
+
+#loader.hide{
+    transform:translateY(-100%);
+    opacity:0;
+    pointer-events:none;
+    visibility:hidden;
+}
+
+.loader-bg-ambient{
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(217, 143, 120, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 20% 80%, rgba(200, 201, 173, 0.18) 0%, transparent 50%);
+    pointer-events:none;
+}
+
+.loader-content{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:0 24px;
+    max-width:540px;
+    width:100%;
+}
+
+.loader-logo-wrapper{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    animation:loaderLogoEnter 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.loader-logo-img{
+    width:min(72vw, 360px);
+    height:auto;
+    display:block;
+    filter:drop-shadow(0 15px 35px rgba(75, 55, 40, 0.08));
+    user-select:none;
+    -webkit-user-drag:none;
+}
+
+/* Shimmer sweep across logo */
+.loader-shine{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        105deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.65) 50%,
+        transparent 65%
+    );
+    transform:translateX(-120%);
+    animation:loaderShine 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    pointer-events:none;
+    mix-blend-mode:screen;
+}
+
+/* Twinkling sparkle near logo star */
+.loader-sparkle{
+    position:absolute;
+    top:2%;
+    right:12%;
+    font-size:22px;
+    color:var(--peach);
+    opacity:0;
+    animation:loaderSparkle 1.6s ease-in-out infinite;
+    pointer-events:none;
+}
+
+/* Progress bar */
+.loader-progress-wrap{
+    width:min(60vw, 260px);
+    margin-top:36px;
+    animation:loaderFadeIn 0.8s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.loader-bar{
+    width:100%;
+    height:2px;
+    background:rgba(41, 37, 31, 0.08);
+    border-radius:999px;
+    overflow:hidden;
+    position:relative;
+}
+
+.loader-bar-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--sage), var(--peach));
+    border-radius:999px;
+    transition:width 0.1s linear;
+}
+
+.loader-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:12px;
+    font-size:10px;
+    letter-spacing:0.22em;
+    color:var(--muted);
+    font-weight:500;
+}
+
+.loader-tag{
+    text-transform:uppercase;
+    opacity:0.75;
+}
+
+.loader-num{
+    font-variant-numeric:tabular-nums;
+    font-weight:600;
+    color:var(--dark);
+}
+
+@keyframes loaderLogoEnter{
+    0%{
+        opacity:0;
+        transform:scale(0.88) translateY(18px);
+        filter:blur(6px);
+    }
+    100%{
+        opacity:1;
+        transform:scale(1) translateY(0);
+        filter:blur(0);
+    }
+}
+
+@keyframes loaderShine{
+    0%, 25%{
+        transform:translateX(-130%);
+    }
+    75%, 100%{
+        transform:translateX(130%);
+    }
+}
+
+@keyframes loaderSparkle{
+    0%, 100%{
+        transform:scale(0.7) rotate(0deg);
+        opacity:0.2;
+    }
+    50%{
+        transform:scale(1.25) rotate(45deg);
+        opacity:1;
+        filter:drop-shadow(0 0 8px rgba(217, 143, 120, 0.7));
+    }
+}
+
+@keyframes loaderFadeIn{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* NAV */
+
+nav{
+    transition:.35s;
+}
+
+nav.scrolled{
+    background:#f8f2eae8;
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+}
+
+.logo{
+    font-family:"DM Serif Display";
+    font-size:30px;
+    color:var(--peach);
+}
+
+.nav-link{
+    position:relative;
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+}
+
+.nav-link:hover{
+    color:var(--dark);
+}
+
+.nav-link:after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:-7px;
+    width:0;
+    height:2px;
+    background:var(--peach);
+    transition:.3s;
+}
+
+.nav-link:hover:after{
+    width:100%;
+}
+
+/* MOBILE MENU */
+
+#mobileMenu{
+    position:fixed;
+    inset:0;
+    background:var(--cream);
+    z-index:90;
+    padding:110px 30px 40px;
+
+    transform:translateY(-100%);
+    opacity:0;
+    pointer-events:none;
+
+    transition:.5s;
+}
+
+#mobileMenu.open{
+    transform:translateY(0);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.mobile-link{
+    font-family:"DM Serif Display";
+    font-size:42px;
+    color:var(--dark);
+}
+
+/* HERO */
+
+.hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:120px 0 70px;
+}
+
+.small-label{
+    font-size:10px;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--muted);
+}
+
+.hero-title{
+    font-family:"DM Serif Display";
+    font-size:clamp(4rem,9vw,9rem);
+    line-height:.86;
+    letter-spacing:-.06em;
+}
+
+.peach{
+    color:var(--peach);
+}
+
+.outline-text{
+    color:transparent;
+    -webkit-text-stroke:1.2px var(--peach);
+}
+
+/* HERO SPHERE */
+
+.hero-visual{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.hero-circle{
+    width:min(38vw,500px);
+    height:min(38vw,500px);
+
+    min-width:280px;
+    min-height:280px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #fffdf9 0%,
+            #f2d9cf 25%,
+            #d8d9c0 60%,
+            #b9ba99 100%
+        );
+
+    box-shadow:
+        0 40px 90px #5c463520,
+        inset 0 0 40px #ffffff55;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-circle:after{
+    content:"";
+    position:absolute;
+    inset:7%;
+    border-radius:50%;
+    border:1px solid #ffffff66;
+}
+
+/* WHALEREX LOGO */
+
+.whalerex-logo{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    color:white;
+    font-family:"Space Grotesk";
+    font-size:clamp(35px,5vw,70px);
+    font-weight:700;
+    letter-spacing:-.07em;
+    text-shadow:
+        0 5px 20px #66584833;
+}
+
+.whalerex-logo span{
+    color:#fff;
+    font-weight:400;
+}
+
+.star{
+    position:absolute;
+    color:var(--peach);
+    font-size:25px;
+    animation:float 3s ease-in-out infinite;
+}
+
+.star1{
+    top:5%;
+    left:8%;
+}
+
+.star2{
+    right:3%;
+    top:35%;
+    animation-delay:.8s;
+}
+
+.star3{
+    bottom:10%;
+    left:5%;
+    animation-delay:1.4s;
+}
+
+@keyframes float{
+
+    50%{
+        transform:translateY(-10px) rotate(8deg);
+    }
+
+}
+
+/* BUTTONS */
+
+.primary-btn,
+.secondary-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:14px 22px;
+
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.primary-btn{
+    background:var(--peach);
+    color:white;
+}
+
+.primary-btn:hover{
+    transform:translateY(-3px);
+    background:#c77d67;
+    box-shadow:0 15px 30px #d98f7835;
+}
+
+.secondary-btn{
+    border:1px solid var(--border);
+    color:var(--dark);
+}
+
+.secondary-btn:hover{
+    background:var(--peach-light);
+    transform:translateY(-3px);
+}
+
+/* STATS */
+
+.stats{
+    background:#ffffff88;
+    border:1px solid var(--border);
+    box-shadow:0 20px 50px #4b37280c;
+}
+
+.stat{
+    border-right:1px solid var(--border);
+}
+
+.stat:last-child{
+    border-right:0;
+}
+
+.stat-number{
+    font-family:"DM Serif Display";
+    font-size:38px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+}
+
+/* MARQUEE */
+
+.marquee{
+    overflow:hidden;
+    border-block:1px solid var(--border);
+}
+
+.marquee-track{
+    display:flex;
+    width:max-content;
+    animation:marquee 25s linear infinite;
+}
+
+.marquee-track span{
+    font-family:"DM Serif Display";
+    font-size:clamp(2.5rem,5vw,5rem);
+    white-space:nowrap;
+    color:#d98f7845;
+    padding-right:70px;
+}
+
+@keyframes marquee{
+
+    to{
+        transform:translateX(-50%);
+    }
+
+}
+
+/* SECTIONS */
+
+.section-label{
+    font-size:10px;
+    color:var(--muted);
+    letter-spacing:.3em;
+    text-transform:uppercase;
+}
+
+.section-title{
+    font-family:"DM Serif Display";
+    font-size:clamp(3.3rem,7vw,7rem);
+    line-height:.87;
+    letter-spacing:-.06em;
+}
+
+/* PROJECT */
+
+.project{
+    background:var(--cream2);
+    border:1px solid var(--border);
+    border-radius:32px;
+    overflow:hidden;
+
+    box-shadow:0 30px 80px #4b37280c;
+
+    transition:.4s;
+}
+
+.project:hover{
+    box-shadow:0 40px 100px #4b372820;
+}
+
+.project-image{
+    height:560px;
+    position:relative;
+    overflow:hidden;
+}
+
+.project-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+
+    transform:scale(1.04);
+    transition:transform 1.2s ease;
+}
+
+.project:hover .project-image img{
+    transform:scale(1.09);
+}
+
+.project-overlay{
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(
+            to top,
+            #29251fcc,
+            transparent 65%
+        );
+}
+
+.project-tag{
+    background:#fff9f3dd;
+    border:1px solid #ffffffaa;
+    backdrop-filter:blur(10px);
+}
+
+/* CARDS */
+
+.card{
+    background:#ffffff70;
+    border:1px solid var(--border);
+    border-radius:24px;
+    transition:.4s;
+}
+
+.card:hover{
+    transform:translateY(-7px);
+    background:#ffffffb5;
+    border-color:#d8b8aa;
+    box-shadow:0 20px 50px #4b372815;
+}
+
+.pill{
+    padding:10px 16px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    font-size:12px;
+    color:#4a433b;
+    transition:.3s;
+}
+
+.pill:hover{
+    background:var(--peach-light);
+    transform:translateY(-2px);
+}
+
+/* CONTACT */
+
+.contact{
+    background:
+        linear-gradient(
+            120deg,
+            var(--sage),
+            #dedec9
+        );
+
+    border-radius:30px;
+    overflow:hidden;
+}
+
+.contact-dark{
+    background:var(--dark);
+    color:white;
+}
+
+/* REVEAL */
+
+.reveal{
+    opacity:0;
+    transform:translateY(45px);
+    transition:
+        opacity .9s cubic-bezier(.22,1,.36,1),
+        transform .9s cubic-bezier(.22,1,.36,1);
+}
+
+.reveal.show{
+    opacity:1;
+    transform:none;
+}
+
+/* FOOTER */
+
+footer{
+    border-top:1px solid var(--border);
+}
+
+.footer-link{
+    color:var(--muted);
+}
+
+.footer-link:hover{
+    color:var(--peach);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .hero{
+        padding-top:105px;
+        padding-bottom:60px;
+    }
+
+    .hero-title{
+        font-size:18vw;
+    }
+
+    .hero-circle{
+        width:280px;
+        height:280px;
+        min-width:280px;
+        min-height:280px;
+    }
+
+    .whalerex-logo{
+        font-size:42px;
+    }
+
+    .project-image{
+        height:420px;
+    }
+
+    .section-title{
+        font-size:15vw;
+    }
+
+    .stat{
+        border-right:0;
+        border-bottom:1px solid var(--border);
+    }
+
+    .stat:nth-child(odd){
+        border-right:1px solid var(--border);
+    }
+
+    .stat:nth-last-child(-n+2){
+        border-bottom:0;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .hero-title{
+        font-size:20vw;
+    }
+
+    .project-image{
+        height:360px;
+    }
+
+    .mobile-link{
+        font-size:36px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- LOADER / OPENING ANIMATION -->
+
+<div id="loader" title="Click anywhere to skip intro">
+    <div class="loader-bg-ambient"></div>
+    <div class="loader-content">
+        <div class="loader-logo-wrapper">
+            <img src="whalerex-logo.png" alt="Whalerex Logo" class="loader-logo-img" />
+            <div class="loader-shine"></div>
+            <span class="loader-sparkle">✦</span>
+        </div>
+
+        <div class="loader-progress-wrap">
+            <div class="loader-bar">
+                <div class="loader-bar-fill" id="loaderBarFill"></div>
+            </div>
+            <div class="loader-meta">
+                <span class="loader-tag">DIGITAL EXPERIENCE</span>
+                <span class="loader-num" id="loaderNum">0%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid-bg"></div>
+
+
+<!-- NAVIGATION -->
+
+<nav id="nav" class="fixed top-0 left-0 right-0 z-[100]">
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+
+        <a href="#home" class="logo">
+            Whalerex
+        </a>
+
+        <div class="hidden md:flex gap-8">
+
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#project" class="nav-link">Work</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#journey" class="nav-link">Journey</a>
+            <a href="#interests" class="nav-link">Interests</a>
+            <a href="#contact" class="nav-link">Contact</a>
+
+        </div>
+
+        <a
+            href="mailto:whalerex350@gmail.com"
+            class="primary-btn hidden md:inline-flex"
+        >
+            Let's Talk ↗
+        </a>
+
+        <button
+            id="menuBtn"
+            class="md:hidden w-11 h-11 rounded-full border border-[#E5DCD2]"
+        >
+            ☰
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- MOBILE MENU -->
+
+<div id="mobileMenu">
+
+    <div class="flex flex-col gap-5">
+
+        <a href="#home" class="mobile-link">Home</a>
+        <a href="#project" class="mobile-link">Work</a>
+        <a href="#about" class="mobile-link">About</a>
+        <a href="#journey" class="mobile-link">Journey</a>
+        <a href="#interests" class="mobile-link">Interests</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+
+    </div>
+
+    <div class="absolute bottom-10 left-7 right-7">
+
+        <a
+            href="mailto:whalerex350@gmail.com"
+            class="primary-btn w-full"
+        >
+            Email Me ↗
+        </a>
+
+    </div>
+
+</div>
+
+
+<main id="home">
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10 w-full">
+
+<div class="grid lg:grid-cols-[1.1fr_.9fr] gap-14 lg:gap-20 items-center">
+
+
+<div>
+
+<p class="small-label mb-7">
+    Hi, I'm Dinesh — A Creative
+</p>
+
+
+<h1 class="hero-title">
+
+<span class="peach">
+    DIGITAL
+</span>
+
+<br>
+
+DESIGNER
+
+</h1>
+
+
+<p class="text-[#756D64] leading-8 max-w-xl mt-9">
+
+I create interactive digital experiences by combining creativity,
+web development and AI-assisted tools.
+
+</p>
+
+
+<div class="flex flex-wrap gap-3 mt-8">
+
+<a
+    href="#project"
+    class="primary-btn"
+>
+    View Project ↗
+</a>
+
+<a
+    href="mailto:whalerex350@gmail.com"
+    class="secondary-btn"
+>
+    Contact Me ↗
+</a>
+
+</div>
+
+</div>
+
+
+<!-- SPHERE -->
+
+<div id="heroVisual" class="hero-visual">
+
+<div class="hero-circle">
+
+<div class="whalerex-logo">
+    Whalerex
+</div>
+
+</div>
+
+<span class="star star1">✦</span>
+<span class="star star2">✦</span>
+<span class="star star3">✦</span>
+
+</div>
+
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="stats mt-16 rounded-[25px] overflow-hidden">
+
+<div class="grid grid-cols-2 md:grid-cols-4">
+
+
+<div class="stat p-6 md:p-8 text-center">
+
+<div class="text-2xl text-[#D98F78]">
+    ✦
+</div>
+
+<div class="stat-number">
+    01
+</div>
+
+<div class="stat-label">
+    Featured Project
+</div>
+
+</div>
+
+
+<div class="stat p-6 md:p-8 text-center">
+
+<div class="text-2xl text-[#D98F78]">
+    ◇
+</div>
+
+<div class="stat-number">
+    B.Sc
+</div>
+
+<div class="stat-label">
+    Physics
+</div>
+
+</div>
+
+
+<div class="stat p-6 md:p-8 text-center">
+
+<div class="text-2xl text-[#D98F78]">
+    ◎
+</div>
+
+<div class="stat-number">
+    02
+</div>
+
+<div class="stat-label">
+    Learning Areas
+</div>
+
+</div>
+
+
+<div class="stat p-6 md:p-8 text-center">
+
+<div class="text-2xl text-[#D98F78]">
+    ✧
+</div>
+
+<div class="stat-number">
+    ∞
+</div>
+
+<div class="stat-label">
+    Curiosity
+</div>
+
+</div>
+
+
+</div>
+</div>
+
+</div>
+</section>
+
+
+<!-- PROJECT -->
+
+<section id="project" class="py-28 md:py-40">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14 reveal">
+
+<div>
+
+<p class="section-label mb-7">
+    01 — Selected Work
+</p>
+
+<h2 class="section-title">
+
+FROM IDEAS
+<br>
+
+TO <span class="outline-text">
+EXPERIENCES.
+</span>
+
+</h2>
+
+</div>
+
+
+<p class="text-[#756D64] max-w-sm leading-7">
+
+My featured web project — a creative digital experience
+created for Waffle House.
+
+</p>
+
+</div>
+
+
+<div id="waffleProject" class="project reveal">
+
+
+<div class="project-image">
+
+<!-- YOUR UPLOADED WAFFLE HOUSE IMAGE -->
+
+<img
+    id="waffleImage"
+    src="73136.png"
+    alt="Waffle House Project"
+>
+
+
+<div class="project-overlay"></div>
+
+
+<div class="absolute top-7 left-7">
+
+<span class="project-tag px-4 py-2 rounded-full text-[10px] tracking-[.2em] uppercase">
+
+Featured Project
+
+</span>
+
+</div>
+
+
+<div class="absolute bottom-7 left-7 right-7 flex items-end justify-between text-white">
+
+<div>
+
+<p class="text-[10px] uppercase tracking-[.25em] opacity-70 mb-2">
+    Web Project
+</p>
+
+<h3 class="font-display text-4xl md:text-6xl font-semibold">
+    Waffle House
+</h3>
+
+</div>
+
+
+<div class="hidden sm:flex w-12 h-12 rounded-full bg-white/90 text-[#29251F] items-center justify-center">
+
+↗
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="p-7 md:p-12">
+
+<p class="section-label mb-4">
+    Creative Web Project
+</p>
+
+
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-10">
+
+
+<div>
+
+<h3 class="font-display text-4xl md:text-6xl font-semibold">
+    Waffle House
+</h3>
+
+
+<p class="text-[#756D64] max-w-xl mt-5 leading-7">
+
+A creative web project built using Antigravity.
+The website provides an interactive experience where visitors
+can explore the website and place orders.
+
+</p>
+
+
+<div class="flex flex-wrap gap-2 mt-6">
+
+<span class="pill">Antigravity</span>
+<span class="pill">Web Design</span>
+<span class="pill">Interactive</span>
+<span class="pill">Ordering</span>
+
+</div>
+
+</div>
+
+
+<a
+    href="https://waffle-house-sigma.vercel.app/"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="primary-btn whitespace-nowrap"
+>
+    Visit Live Website ↗
+</a>
+
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- MARQUEE -->
+
+<div class="marquee py-7">
+
+<div class="marquee-track">
+
+<span>BUILD. DESIGN. EXPERIENCE. —</span>
+<span>BUILD. DESIGN. EXPERIENCE. —</span>
+<span>BUILD. DESIGN. EXPERIENCE. —</span>
+<span>BUILD. DESIGN. EXPERIENCE. —</span>
+
+</div>
+
+</div>
+
+
+<!-- ABOUT -->
+
+<section id="about" class="py-28 md:py-40">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-[.7fr_1.3fr] gap-16">
+
+
+<div>
+
+<p class="section-label">
+    02 — About Me
+</p>
+
+</div>
+
+
+<div>
+
+<h2 class="section-title mb-12 reveal">
+
+CURIOUS
+<br>
+
+BY <span class="outline-text">
+NATURE.
+</span>
+
+</h2>
+
+
+<div class="grid md:grid-cols-2 gap-10 reveal">
+
+<p class="text-[#756D64] leading-8">
+
+I'm Dinesh, currently pursuing B.Sc. Physics
+at R.D.G.A. College, Sivaganga.
+
+</p>
+
+
+<p class="text-[#756D64] leading-8">
+
+Alongside my studies, I'm learning Python and Excel
+while exploring web development, design, AI tools,
+animation and interactive digital experiences.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- JOURNEY -->
+
+<section id="journey" class="py-28 md:py-40 border-t border-[#E5DCD2]">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+
+<p class="section-label mb-7">
+    03 — My Journey
+</p>
+
+
+<h2 class="section-title mb-16 reveal">
+
+LEARNING
+<br>
+
+<span class="outline-text">
+AND
+</span>
+
+<br>
+
+BUILDING.
+
+</h2>
+
+
+<div class="grid md:grid-cols-2 gap-5">
+
+
+<div class="card p-8 md:p-10 reveal">
+
+<p class="section-label mb-16">
+    Education
+</p>
+
+<p class="text-[#756D64] text-sm">
+    R.D.G.A. College, Sivaganga
+</p>
+
+<h3 class="font-display text-3xl md:text-4xl font-semibold mt-2">
+    B.Sc. Physics
+</h3>
+
+<p class="text-[#756D64] mt-3">
+    2nd Year
+</p>
+
+</div>
+
+
+<div class="card p-8 md:p-10 reveal">
+
+<p class="section-label mb-16">
+    Certificate
+</p>
+
+<p class="text-[#756D64] text-sm">
+    Completed
+</p>
+
+<h3 class="font-display text-3xl md:text-4xl font-semibold mt-2">
+
+Fundamentals
+<br>
+of Design
+
+</h3>
+
+<p class="text-[#756D64] mt-3">
+    Adobe
+</p>
+
+</div>
+
+
+<div class="card p-8 md:p-10 reveal md:col-span-2">
+
+<p class="section-label mb-6">
+    Self Learning
+</p>
+
+<h3 class="font-display text-4xl md:text-6xl font-semibold">
+    PYTHON + EXCEL
+</h3>
+
+<p class="text-[#756D64] max-w-md leading-7 mt-5">
+
+I enjoy learning independently and experimenting
+with different tools to understand how things work.
+
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- INTERESTS -->
+
+<section id="interests" class="py-28 md:py-40">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+
+<p class="section-label mb-7">
+    04 — Interests
+</p>
+
+
+<h2 class="section-title reveal">
+
+THINGS
+<br>
+
+THAT
+<br>
+
+<span class="outline-text">
+INSPIRE ME.
+</span>
+
+</h2>
+
+
+<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ✦
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    Design & Creativity
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Exploring visual ideas and creative digital experiences.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ◇
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    Web Development
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Building and experimenting with interactive websites.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ◎
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    Problem Solving
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Understanding problems and finding practical solutions.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ∞
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    Learning New Things
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Constantly exploring new tools, concepts and ideas.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ◌
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    Physics & Science
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Understanding how things work through science.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ▦
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    Data & Excel
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Exploring data, spreadsheets and analytical thinking.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ✧
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    AI Tools
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Exploring AI-assisted workflows and creative tools.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-2xl text-[#D98F78] mb-12">
+    ◈
+</div>
+
+<h3 class="font-display text-xl font-semibold">
+    Animation & Visuals
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Experimenting with motion, animation and visual effects.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SKILLS -->
+
+<section class="py-28 md:py-40 border-t border-[#E5DCD2]">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+
+<p class="section-label mb-7">
+    05 — Learning Stack
+</p>
+
+
+<h2 class="section-title reveal">
+
+CURRENTLY
+<br>
+
+<span class="outline-text">
+EXPLORING.
+</span>
+
+</h2>
+
+
+<p class="text-[#756D64] max-w-md leading-7 mt-10 reveal">
+
+These are the areas and tools I'm currently learning,
+practicing and experimenting with.
+
+</p>
+
+
+<div class="flex flex-wrap gap-3 mt-10 reveal">
+
+<span class="pill">Python</span>
+<span class="pill">Excel</span>
+<span class="pill">Web Development</span>
+<span class="pill">Web Design</span>
+<span class="pill">AI-Assisted Development</span>
+<span class="pill">Creative Tools</span>
+<span class="pill">Animation</span>
+<span class="pill">Problem Solving</span>
+<span class="pill">Data</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PROCESS -->
+
+<section class="py-28 md:py-40">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+
+<p class="section-label mb-7">
+    My Approach
+</p>
+
+
+<h2 class="section-title reveal">
+
+FROM <span class="outline-text">
+IDEA
+</span>
+
+<br>
+
+TO
+<br>
+
+EXPERIENCE.
+
+</h2>
+
+
+<div class="grid md:grid-cols-4 gap-5 mt-16">
+
+
+<div class="card p-7 reveal">
+
+<div class="text-4xl text-[#D98F78] font-serif">
+    01
+</div>
+
+<hr class="my-7 border-[#E5DCD2]">
+
+<h3 class="font-display text-xl font-semibold">
+    Discover
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Understand the idea, purpose and experience.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-4xl text-[#D98F78] font-serif">
+    02
+</div>
+
+<hr class="my-7 border-[#E5DCD2]">
+
+<h3 class="font-display text-xl font-semibold">
+    Plan
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Organize the structure, content and visual direction.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-4xl text-[#D98F78] font-serif">
+    03
+</div>
+
+<hr class="my-7 border-[#E5DCD2]">
+
+<h3 class="font-display text-xl font-semibold">
+    Build
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Turn the concept into an interactive digital experience.
+</p>
+
+</div>
+
+
+<div class="card p-7 reveal">
+
+<div class="text-4xl text-[#D98F78] font-serif">
+    04
+</div>
+
+<hr class="my-7 border-[#E5DCD2]">
+
+<h3 class="font-display text-xl font-semibold">
+    Refine
+</h3>
+
+<p class="text-[#756D64] text-sm leading-6 mt-3">
+    Improve the experience and polish the final result.
+</p>
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PHILOSOPHY -->
+
+<section class="py-28 md:py-40">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+<div class="border-y border-[#E5DCD2] py-20 text-center reveal">
+
+<p class="section-label mb-10">
+    My Philosophy
+</p>
+
+
+<h2 class="font-serif text-6xl md:text-8xl leading-[.85]">
+
+LEARNING.
+<br>
+
+<span class="outline-text">
+BUILDING.
+</span>
+
+<br>
+
+CREATING.
+
+</h2>
+
+
+<p class="max-w-xl mx-auto text-[#756D64] leading-7 mt-12">
+
+I believe every project is an opportunity to learn something new,
+experiment with ideas and create something meaningful.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CONTACT -->
+
+<section id="contact" class="py-28 md:py-40">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10">
+
+
+<div class="contact p-8 md:p-14 reveal">
+
+
+<div class="relative z-10 grid lg:grid-cols-[1fr_auto] gap-12 items-end">
+
+
+<div>
+
+<p class="small-label mb-8">
+    06 — Let's Connect
+</p>
+
+
+<h2 class="font-serif text-6xl md:text-8xl leading-[.85]">
+
+LET'S CREATE
+<br>
+
+SOMETHING
+<br>
+
+<span class="text-[#D98F78]">
+EXTRAORDINARY.
+</span>
+
+</h2>
+
+
+<p class="text-[#4A433B] max-w-lg leading-7 mt-9">
+
+I'm open to creative projects, website ideas,
+collaborations and new opportunities.
+
+</p>
+
+</div>
+
+
+<div class="flex flex-col gap-3">
+
+
+<a
+    href="mailto:whalerex350@gmail.com"
+    class="primary-btn contact-dark min-w-[230px]"
+>
+    Let's Work Together ↗
+</a>
+
+
+<a
+    href="https://www.linkedin.com/in/dinesh-r-342681403"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="secondary-btn min-w-[230px]"
+>
+    LinkedIn ↗
+</a>
+
+
+<a
+    href="https://github.com/vd2260434-maker"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="secondary-btn min-w-[230px]"
+>
+    GitHub ↗
+</a>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="mt-14 pt-8 border-t border-[#E5DCD2]">
+
+<a
+    href="mailto:whalerex350@gmail.com"
+    class="font-display text-lg md:text-2xl text-[#756D64] hover:text-[#D98F78]"
+>
+    whalerex350@gmail.com
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="py-10">
+
+<div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row justify-between gap-7">
+
+
+<div>
+
+<div class="logo">
+    Whalerex
+</div>
+
+<p class="text-[#756D64] text-sm mt-2">
+    Creative Web Developer & Designer
+</p>
+
+</div>
+
+
+<div class="flex gap-6 text-sm">
+
+
+<a
+    class="footer-link"
+    href="https://github.com/vd2260434-maker"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    GitHub
+</a>
+
+
+<a
+    class="footer-link"
+    href="https://www.linkedin.com/in/dinesh-r-342681403"
+    target="_blank"
+    rel="noopener noreferrer"
+>
+    LinkedIn
+</a>
+
+
+<a
+    class="footer-link"
+    href="mailto:whalerex350@gmail.com"
+>
+    Email
+</a>
+
+
+</div>
+
+</div>
+
+</footer>
+
+
+<script>
+
+/* LOADER / OPENING ANIMATION */
+
+(function(){
+    const loader = document.getElementById("loader");
+    const barFill = document.getElementById("loaderBarFill");
+    const loaderNum = document.getElementById("loaderNum");
+
+    let isDone = false;
+
+    function finishLoader(){
+        if(isDone) return;
+        isDone = true;
+        if(barFill) barFill.style.width = "100%";
+        if(loaderNum) loaderNum.textContent = "100%";
+        setTimeout(()=>{
+            if(loader){
+                loader.classList.add("hide");
+                setTimeout(()=>{
+                    loader.style.display = "none";
+                }, 900);
+            }
+        }, 220);
+    }
+
+    // Skip on click or keypress
+    if(loader){
+        loader.addEventListener("click", finishLoader);
+    }
+    window.addEventListener("keydown", finishLoader, {once:true});
+
+    // Animate loading progress smoothly
+    const startTime = performance.now();
+    const duration = 1200; // 1.2s smooth loading
+
+    function updateProgress(currentTime){
+        if(isDone) return;
+        const elapsed = currentTime - startTime;
+        const pct = Math.min(100, Math.round((elapsed / duration) * 100));
+
+        if(barFill) barFill.style.width = pct + "%";
+        if(loaderNum) loaderNum.textContent = pct + "%";
+
+        if(pct < 100){
+            requestAnimationFrame(updateProgress);
+        } else {
+            finishLoader();
+        }
+    }
+
+    // Start progress
+    requestAnimationFrame(updateProgress);
+})();
+
+
+/* NAV */
+
+const nav=document.getElementById("nav");
+
+window.addEventListener("scroll",()=>{
+
+    nav.classList.toggle(
+        "scrolled",
+        window.scrollY>30
+    );
+
+},{passive:true});
+
+
+/* MOBILE MENU */
+
+const menuBtn=document.getElementById("menuBtn");
+const mobileMenu=document.getElementById("mobileMenu");
+
+menuBtn.addEventListener("click",()=>{
+
+    mobileMenu.classList.toggle("open");
+
+});
+
+
+document
+.querySelectorAll(".mobile-link")
+.forEach(link=>{
+
+    link.addEventListener("click",()=>{
+
+        mobileMenu.classList.remove("open");
+
+    });
+
+});
+
+
+/* SCROLL REVEAL */
+
+const observer=new IntersectionObserver(
+
+    entries=>{
+
+        entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+
+                entry.target.classList.add("show");
+
+                observer.unobserve(entry.target);
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold:.12
+    }
+
+);
+
+
+document
+.querySelectorAll(".reveal")
+.forEach(el=>observer.observe(el));
+
+
+/* HERO PARALLAX */
+
+const heroVisual=
+document.getElementById("heroVisual");
+
+window.addEventListener("scroll",()=>{
+
+    if(window.innerWidth<768) return;
+
+    const y=window.scrollY;
+
+    if(y<window.innerHeight){
+
+        heroVisual.style.transform=
+        `translateY(${y*.08}px)`;
+
+    }
+
+},{passive:true});
+
+
+/* WAFFLE HOUSE IMAGE PARALLAX */
+
+const waffleImage=
+document.getElementById("waffleImage");
+
+function waffleParallax(){
+
+    if(!waffleImage) return;
+
+    const rect=
+    waffleImage.getBoundingClientRect();
+
+    if(
+        rect.top < window.innerHeight &&
+        rect.bottom > 0
+    ){
+
+        const progress=
+        (window.innerHeight-rect.top)/
+        (window.innerHeight+rect.height);
+
+        const movement=
+        (progress-.5)*45;
+
+        waffleImage.style.transform=
+        `scale(1.08) translateY(${movement}px)`;
+
+    }
+
+}
+
+window.addEventListener(
+    "scroll",
+    waffleParallax,
+    {passive:true}
+);
+
+waffleParallax();
+
+
+/* PROJECT 3D EFFECT */
+
+const project=
+document.getElementById("waffleProject");
+
+project.addEventListener("mousemove",(e)=>{
+
+    if(window.innerWidth<768) return;
+
+    const rect=
+    project.getBoundingClientRect();
+
+    const x=
+    (e.clientX-rect.left-rect.width/2)/
+    (rect.width/2);
+
+    const y=
+    (e.clientY-rect.top-rect.height/2)/
+    (rect.height/2);
+
+    project.style.transform=
+    `
+    perspective(1400px)
+    rotateX(${-y*.7}deg)
+    rotateY(${x*.7}deg)
+    `;
+
+});
+
+
+project.addEventListener("mouseleave",()=>{
+
+    project.style.transform="";
+
+});
+
+
+/* SMOOTH ANCHOR */
+
+document
+.querySelectorAll('a[href^="#"]')
+.forEach(link=>{
+
+    link.addEventListener("click",(e)=>{
+
+        const target=
+        document.querySelector(
+            link.getAttribute("href")
+        );
+
+        if(target){
+
+            e.preventDefault();
+
+            window.scrollTo({
+
+                top:
+                target.offsetTop-70,
+
+                behavior:"smooth"
+
+            });
+
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>

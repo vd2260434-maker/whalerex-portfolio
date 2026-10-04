@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Environment and sensitive files
+.env
+.env.*
+*.local
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.venv
+venv/
+ENV/
+
+# System and IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Vercel deployment cache
+.vercel/
