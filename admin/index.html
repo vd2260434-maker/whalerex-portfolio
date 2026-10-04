@@ -321,44 +321,122 @@ body{
              ============================================== -->
         <section id="tab-projects" class="hidden space-y-6">
             <div class="glass rounded-3xl p-6 sm:p-8">
-                <div class="flex items-center justify-between border-b border-[#e4dcd3] pb-4 mb-6">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#e4dcd3] pb-4 mb-6 gap-4">
                     <div>
-                        <h2 class="font-serif-display text-2xl text-zinc-900">Manage Featured Project</h2>
-                        <p class="text-xs text-[#756d64]">Edit the live project data displayed on the portfolio</p>
-                    </div>
-                    <a id="projectPreviewLink" href="https://waffle-house-sigma.vercel.app/" target="_blank" class="primary-btn px-4 py-2 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
-                        <span>Visit Project ↗</span>
-                    </a>
-                </div>
-
-                <form id="projectForm" onsubmit="handleProjectUpdate(event)" class="space-y-5">
-                    <div class="grid sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5">Project Title</label>
-                            <input type="text" id="projTitle" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm" value="Waffle House" required />
+                        <div class="flex items-center gap-2.5 flex-wrap">
+                            <h2 class="font-serif-display text-2xl text-zinc-900">Featured Project & Data</h2>
+                            <span id="projectCountBadge" class="badge badge-read text-xs font-mono">1 Project</span>
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5">Category / Tagline</label>
-                            <input type="text" id="projTagline" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm" value="Artisanal Belgian Liege Boutique" required />
-                        </div>
+                        <p class="text-xs text-[#756d64] mt-0.5">Manage all projects in your portfolio catalog and choose which project is featured</p>
                     </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5">Live Production URL</label>
-                        <input type="url" id="projUrl" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm font-mono text-xs" value="https://waffle-house-sigma.vercel.app/" required />
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5">Project Description</label>
-                        <textarea id="projDesc" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm">A creative web project built using Antigravity. The website provides an interactive experience where visitors can explore the website and place orders.</textarea>
-                    </div>
-
-                    <div class="pt-4 flex justify-end">
-                        <button type="submit" class="primary-btn px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider">
-                            Save Project Changes
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                        <a id="projectPreviewLink" href="https://waffle-house-sigma.vercel.app/" target="_blank" class="primary-btn px-4 py-2 rounded-full text-xs font-semibold inline-flex items-center gap-1.5">
+                            <span>Visit Featured Live ↗</span>
+                        </a>
+                        <button type="button" onclick="openNewProjectForm()" class="px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#d98f78] text-white hover:bg-[#c67c65] transition-all flex items-center gap-1.5 shadow-sm">
+                            <span class="text-base font-bold leading-none">+</span>
+                            <span>New Project</span>
                         </button>
                     </div>
-                </form>
+                </div>
+
+                <!-- Projects Catalog Grid -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-[#756d64]">Project Catalog</h3>
+                        <span class="text-[11px] text-[#756d64]">Click "★ Set as Featured" to update the live portfolio</span>
+                    </div>
+                    <div id="projectsList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Project Editor Form Card -->
+                <div id="projectEditorCard" class="border border-[#e4dcd3] rounded-2xl p-5 sm:p-6 bg-white/70 backdrop-blur-sm shadow-sm transition-all">
+                    <div class="flex items-center justify-between border-b border-[#e4dcd3]/60 pb-3 mb-5">
+                        <div>
+                            <h3 id="formModeTitle" class="font-serif-display text-lg text-zinc-900 flex items-center gap-2">
+                                <span>Edit Featured Project</span>
+                                <span id="editingProjectBadge" class="badge badge-read text-[10px] font-sans">Waffle House</span>
+                            </h3>
+                            <p id="formModeSubtitle" class="text-xs text-[#756d64]">Edit the project data displayed on the portfolio</p>
+                        </div>
+                        <button type="button" id="cancelEditHeaderBtn" onclick="resetToFeaturedProject()" class="text-xs text-[#756d64] hover:text-[#29251f] underline hidden">
+                            Cancel & Return
+                        </button>
+                    </div>
+
+                    <form id="projectForm" onsubmit="handleProjectUpdate(event)" class="space-y-5">
+                        <input type="hidden" id="projId" value="proj_waffle_house" />
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5" for="projTitle">Project Title</label>
+                                <input type="text" id="projTitle" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm focus:outline-none focus:border-[#d98f78] transition-colors" value="Waffle House" placeholder="e.g. Waffle House" required />
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5" for="projTagline">Category / Tagline</label>
+                                <input type="text" id="projTagline" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm focus:outline-none focus:border-[#d98f78] transition-colors" value="Artisanal Belgian Liege Boutique" placeholder="e.g. Artisanal Belgian Liege Boutique" required />
+                            </div>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5" for="projUrl">Live Production URL</label>
+                                <input type="url" id="projUrl" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm font-mono text-xs focus:outline-none focus:border-[#d98f78] transition-colors" value="https://waffle-house-sigma.vercel.app/" placeholder="https://..." required />
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5" for="projImage">Project Image / Thumbnail</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="projImage" oninput="updateImagePreview()" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm font-mono text-xs focus:outline-none focus:border-[#d98f78] transition-colors" value="73136.png" placeholder="73136.png or image URL" />
+                                    <div class="w-10 h-10 rounded-lg overflow-hidden border border-[#e4dcd3] bg-zinc-100 flex-shrink-0 flex items-center justify-center">
+                                        <img id="projImagePreview" src="73136.png" alt="Preview" class="w-full h-full object-cover" onerror="this.src='whalerex-logo.png'" />
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 mt-1.5">
+                                    <span class="text-[10px] text-[#756d64]">Quick pick:</span>
+                                    <button type="button" onclick="setProjectImagePreset('73136.png')" class="text-[10px] px-2 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition">73136.png</button>
+                                    <button type="button" onclick="setProjectImagePreset('whalerex-logo.png')" class="text-[10px] px-2 py-0.5 rounded bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition">Logo</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-[#756d64] mb-1.5" for="projDesc">Project Description</label>
+                            <textarea id="projDesc" rows="3" class="w-full px-4 py-2.5 rounded-xl border border-[#e4dcd3] bg-white text-sm focus:outline-none focus:border-[#d98f78] transition-colors" placeholder="A creative web project built using Antigravity...">A creative web project built using Antigravity. The website provides an interactive experience where visitors can explore the website and place orders.</textarea>
+                        </div>
+
+                        <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200/70 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-2.5">
+                                <input type="checkbox" id="projIsFeatured" class="w-4 h-4 rounded text-[#d98f78] focus:ring-0 cursor-pointer" checked />
+                                <label for="projIsFeatured" class="text-xs font-medium text-zinc-800 cursor-pointer">
+                                    Display as <span class="font-semibold text-zinc-900">Featured Project</span> on portfolio homepage
+                                </label>
+                            </div>
+                            <span class="text-[11px] text-amber-700 hidden sm:inline">★ Featured project will appear in main hero section</span>
+                        </div>
+
+                        <!-- Button Controls Section -->
+                        <div class="pt-2 flex flex-col items-end gap-3">
+                            <!-- Current "Save Project Changes" button -->
+                            <button type="submit" id="saveProjectBtn" class="primary-btn w-full sm:w-auto px-7 py-3 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2">
+                                <span id="saveProjectBtnText">Save Project Changes</span>
+                            </button>
+
+                            <!-- DIRECTLY BELOW "Save Project Changes" button: Clear "+ Add New Project" button -->
+                            <div class="w-full pt-4 border-t border-[#e4dcd3]/60 flex items-center justify-between flex-wrap gap-3">
+                                <button type="button" id="addNewProjectBtn" onclick="openNewProjectForm()" class="w-full sm:w-auto px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider border-2 border-[#29251f] text-[#29251f] hover:bg-[#29251f] hover:text-[#f8f2ea] transition-all flex items-center justify-center gap-2 shadow-sm font-sans">
+                                    <span class="text-base font-bold leading-none">+</span>
+                                    <span>Add New Project</span>
+                                </button>
+                                <button type="button" id="cancelProjectBtn" onclick="resetToFeaturedProject()" class="text-xs text-[#756d64] hover:text-[#29251f] underline hidden">
+                                    Cancel & Return to Featured Project
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </section>
 
@@ -872,21 +950,309 @@ async function submitTestMessage(e) {
 }
 
 // ==============================================
-// SETTINGS & PROJECT MANAGEMENT
+// SETTINGS & MULTI-PROJECT MANAGEMENT
 // ==============================================
+const DEFAULT_PROJECT = {
+    id: 'proj_waffle_house',
+    title: 'Waffle House',
+    tagline: 'Artisanal Belgian Liege Boutique',
+    category: 'Featured Web Project',
+    description: 'A creative web project built using Antigravity. The website provides an interactive experience where visitors can explore the website and place orders.',
+    liveUrl: 'https://waffle-house-sigma.vercel.app/',
+    image: '73136.png',
+    isFeatured: true
+};
+
+let allProjects = [DEFAULT_PROJECT];
+let editingProjectId = 'proj_waffle_house';
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function updateImagePreview() {
+    const val = document.getElementById('projImage').value.trim();
+    const preview = document.getElementById('projImagePreview');
+    if (preview) {
+        preview.src = val || '73136.png';
+    }
+}
+
+function setProjectImagePreset(val) {
+    document.getElementById('projImage').value = val;
+    updateImagePreview();
+}
+
+function renderProjectsList() {
+    const container = document.getElementById('projectsList');
+    const badge = document.getElementById('projectCountBadge');
+    if (!container) return;
+
+    if (badge) {
+        badge.textContent = allProjects.length + (allProjects.length === 1 ? ' Project' : ' Projects');
+    }
+
+    if (allProjects.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-full py-8 text-center text-[#756d64] text-xs">
+                No projects found. Click <strong>+ Add New Project</strong> below to create your first project.
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = allProjects.map(p => {
+        const isFeatured = Boolean(p.isFeatured);
+        const isCurrentlyEditing = editingProjectId === p.id;
+        const img = p.image || '73136.png';
+
+        return `
+            <div class="relative rounded-2xl p-4 transition-all duration-200 ${isFeatured ? 'bg-amber-50/70 border-2 border-amber-300 shadow-sm' : 'bg-white/80 border border-[#e4dcd3] hover:border-zinc-400'} ${isCurrentlyEditing ? 'ring-2 ring-[#d98f78]' : ''}">
+                <div class="flex items-start gap-3 mb-3">
+                    <div class="w-14 h-14 rounded-xl overflow-hidden bg-zinc-100 border border-[#e4dcd3] flex-shrink-0 flex items-center justify-center">
+                        <img src="${escapeHtml(img)}" alt="${escapeHtml(p.title)}" class="w-full h-full object-cover" onerror="this.src='whalerex-logo.png'" />
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <h4 class="font-semibold text-sm text-zinc-900 truncate" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h4>
+                            ${isFeatured ? '<span class="badge text-[10px] px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 font-semibold inline-flex items-center gap-1"><span>★</span> Featured</span>' : ''}
+                        </div>
+                        <p class="text-xs text-[#756d64] truncate mt-0.5" title="${escapeHtml(p.tagline || p.category || '')}">${escapeHtml(p.tagline || p.category || 'Web Project')}</p>
+                        ${p.liveUrl ? `<a href="${escapeHtml(p.liveUrl)}" target="_blank" class="text-[11px] text-[#d98f78] hover:underline font-mono truncate block mt-0.5">Visit Live ↗</a>` : ''}
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-[#e4dcd3]/60 flex items-center justify-between gap-2 flex-wrap">
+                    <div>
+                        ${isFeatured ? `
+                            <span class="text-[11px] font-semibold text-amber-800 flex items-center gap-1">
+                                <span>★</span> Active on Homepage
+                            </span>
+                        ` : `
+                            <button type="button" onclick="setAsFeaturedProject('${escapeHtml(p.id)}')" class="px-2.5 py-1 rounded-full text-[11px] font-medium border border-[#e4dcd3] bg-white hover:bg-amber-50 hover:border-amber-400 text-zinc-700 transition flex items-center gap-1">
+                                <span>☆</span> Set as Featured
+                            </button>
+                        `}
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" onclick="editProject('${escapeHtml(p.id)}')" class="px-2.5 py-1 rounded-lg text-xs font-medium text-zinc-700 hover:bg-zinc-100 transition flex items-center gap-1 border border-transparent hover:border-[#e4dcd3]">
+                            <span>✏</span> Edit
+                        </button>
+                        <button type="button" onclick="deleteProject('${escapeHtml(p.id)}')" class="px-2.5 py-1 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 transition flex items-center gap-1" title="Delete Project">
+                            <span>🗑</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function openNewProjectForm() {
+    editingProjectId = null;
+    document.getElementById('projId').value = '';
+    document.getElementById('projTitle').value = '';
+    document.getElementById('projTagline').value = '';
+    document.getElementById('projUrl').value = '';
+    document.getElementById('projDesc').value = '';
+    document.getElementById('projImage').value = '73136.png';
+    document.getElementById('projIsFeatured').checked = allProjects.length === 0;
+
+    document.getElementById('formModeTitle').innerHTML = '<span>✨ Add New Project</span>';
+    document.getElementById('formModeSubtitle').textContent = 'Create a new project and add it to your portfolio catalog';
+    const badge = document.getElementById('editingProjectBadge');
+    if (badge) badge.classList.add('hidden');
+
+    document.getElementById('saveProjectBtnText').textContent = '+ Create & Save Project';
+    document.getElementById('cancelProjectBtn').classList.remove('hidden');
+    document.getElementById('cancelEditHeaderBtn').classList.remove('hidden');
+
+    updateImagePreview();
+    renderProjectsList();
+
+    const editorCard = document.getElementById('projectEditorCard');
+    if (editorCard) {
+        editorCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    setTimeout(() => {
+        document.getElementById('projTitle').focus();
+    }, 200);
+}
+
+function editProject(id) {
+    const p = allProjects.find(item => item.id === id);
+    if (!p) return;
+
+    editingProjectId = p.id;
+    document.getElementById('projId').value = p.id;
+    document.getElementById('projTitle').value = p.title || '';
+    document.getElementById('projTagline').value = p.tagline || p.category || '';
+    document.getElementById('projUrl').value = p.liveUrl || '';
+    document.getElementById('projDesc').value = p.description || '';
+    document.getElementById('projImage').value = p.image || '73136.png';
+    document.getElementById('projIsFeatured').checked = Boolean(p.isFeatured);
+
+    document.getElementById('formModeTitle').innerHTML = `
+        <span>Edit Project</span>
+        <span id="editingProjectBadge" class="badge badge-read text-[10px] font-sans">${escapeHtml(p.title)}</span>
+    `;
+    document.getElementById('formModeSubtitle').textContent = 'Modify project details or toggle featured status';
+
+    document.getElementById('saveProjectBtnText').textContent = 'Save Project Changes';
+    document.getElementById('cancelProjectBtn').classList.remove('hidden');
+    document.getElementById('cancelEditHeaderBtn').classList.remove('hidden');
+
+    updateImagePreview();
+    renderProjectsList();
+
+    const editorCard = document.getElementById('projectEditorCard');
+    if (editorCard) {
+        editorCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+function resetToFeaturedProject() {
+    const featured = allProjects.find(p => p.isFeatured) || allProjects[0] || DEFAULT_PROJECT;
+    editProject(featured.id);
+    document.getElementById('formModeTitle').innerHTML = `
+        <span>Edit Featured Project</span>
+        <span id="editingProjectBadge" class="badge badge-read text-[10px] font-sans">${escapeHtml(featured.title)}</span>
+    `;
+    document.getElementById('formModeSubtitle').textContent = 'Edit the project data displayed on the portfolio';
+    document.getElementById('cancelProjectBtn').classList.add('hidden');
+    document.getElementById('cancelEditHeaderBtn').classList.add('hidden');
+}
+
+async function setAsFeaturedProject(id) {
+    allProjects = allProjects.map(p => ({
+        ...p,
+        isFeatured: p.id === id
+    }));
+
+    const featured = allProjects.find(p => p.id === id);
+    if (!featured) return;
+
+    const previewLink = document.getElementById('projectPreviewLink');
+    if (previewLink && featured.liveUrl) {
+        previewLink.href = featured.liveUrl;
+    }
+
+    renderProjectsList();
+    if (editingProjectId === id) {
+        document.getElementById('projIsFeatured').checked = true;
+    }
+
+    // Persist to server
+    try {
+        await fetch('/api/settings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + currentToken
+            },
+            body: JSON.stringify({
+                projects: allProjects,
+                featuredProject: featured,
+                featuredProjectId: id
+            })
+        });
+    } catch (e) {
+        console.warn('Persisting locally:', e);
+    }
+
+    localStorage.setItem('whalerex_local_projects', JSON.stringify(allProjects));
+    showToast(`"${featured.title}" set as Featured Project`);
+}
+
+async function deleteProject(id) {
+    const p = allProjects.find(item => item.id === id);
+    if (!p) return;
+
+    if (allProjects.length <= 1) {
+        showToast('Cannot delete the only project in catalog');
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to delete "${p.title}"?`)) {
+        return;
+    }
+
+    const wasFeatured = Boolean(p.isFeatured);
+    allProjects = allProjects.filter(item => item.id !== id);
+
+    if (wasFeatured && allProjects.length > 0) {
+        allProjects[0].isFeatured = true;
+    }
+
+    const currentFeatured = allProjects.find(item => item.isFeatured) || allProjects[0];
+    const previewLink = document.getElementById('projectPreviewLink');
+    if (previewLink && currentFeatured && currentFeatured.liveUrl) {
+        previewLink.href = currentFeatured.liveUrl;
+    }
+
+    // Persist to server
+    try {
+        await fetch('/api/settings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + currentToken
+            },
+            body: JSON.stringify({
+                projects: allProjects,
+                featuredProject: currentFeatured,
+                featuredProjectId: currentFeatured.id
+            })
+        });
+    } catch (e) {
+        console.warn('Persisting locally:', e);
+    }
+
+    localStorage.setItem('whalerex_local_projects', JSON.stringify(allProjects));
+    showToast(`Project "${p.title}" deleted`);
+
+    if (editingProjectId === id) {
+        resetToFeaturedProject();
+    } else {
+        renderProjectsList();
+    }
+}
+
 async function fetchSettings() {
     try {
         const res = await fetch('/api/settings');
         if (res.ok) {
             const data = await res.json();
-            const s = data.settings;
-            if (s.featuredProject) {
-                document.getElementById('projTitle').value = s.featuredProject.title || '';
-                document.getElementById('projTagline').value = s.featuredProject.tagline || '';
-                document.getElementById('projUrl').value = s.featuredProject.liveUrl || '';
-                document.getElementById('projDesc').value = s.featuredProject.description || '';
-                document.getElementById('projectPreviewLink').href = s.featuredProject.liveUrl || '#';
+            const s = data.settings || {};
+
+            if (Array.isArray(s.projects) && s.projects.length > 0) {
+                allProjects = s.projects;
+            } else if (s.featuredProject) {
+                allProjects = [{ ...s.featuredProject, id: s.featuredProject.id || 'proj_waffle_house', isFeatured: true }];
             }
+
+            const activeFeatured = allProjects.find(p => p.isFeatured) || allProjects[0];
+            if (activeFeatured) {
+                document.getElementById('projTitle').value = activeFeatured.title || '';
+                document.getElementById('projTagline').value = activeFeatured.tagline || activeFeatured.category || '';
+                document.getElementById('projUrl').value = activeFeatured.liveUrl || '';
+                document.getElementById('projDesc').value = activeFeatured.description || '';
+                document.getElementById('projImage').value = activeFeatured.image || '73136.png';
+                document.getElementById('projIsFeatured').checked = true;
+                editingProjectId = activeFeatured.id;
+
+                const previewLink = document.getElementById('projectPreviewLink');
+                if (previewLink && activeFeatured.liveUrl) {
+                    previewLink.href = activeFeatured.liveUrl;
+                }
+            }
+
             if (s.availability) {
                 document.getElementById('setAvailability').value = s.availability;
             }
@@ -897,19 +1263,87 @@ async function fetchSettings() {
                 if (s.socialLinks.linkedin) document.getElementById('setLinkedin').value = s.socialLinks.linkedin;
                 if (s.socialLinks.github) document.getElementById('setGithub').value = s.socialLinks.github;
             }
+
+            updateImagePreview();
+            renderProjectsList();
+            return;
         }
     } catch (e) {}
+
+    // Fallback if offline
+    renderProjectsList();
+    updateImagePreview();
 }
 
 async function handleProjectUpdate(e) {
     e.preventDefault();
-    const payload = {
-        featuredProject: {
-            title: document.getElementById('projTitle').value,
-            tagline: document.getElementById('projTagline').value,
-            liveUrl: document.getElementById('projUrl').value,
-            description: document.getElementById('projDesc').value
+
+    const titleVal = document.getElementById('projTitle').value.trim();
+    const taglineVal = document.getElementById('projTagline').value.trim();
+    const urlVal = document.getElementById('projUrl').value.trim();
+    const descVal = document.getElementById('projDesc').value.trim();
+    const imageVal = document.getElementById('projImage').value.trim() || '73136.png';
+    const isFeaturedVal = document.getElementById('projIsFeatured').checked;
+
+    if (!titleVal || !taglineVal || !urlVal) {
+        showToast('Please fill in title, category/tagline, and URL');
+        return;
+    }
+
+    let targetId = editingProjectId;
+    const isNew = !targetId;
+
+    if (isNew) {
+        targetId = 'proj_' + Date.now();
+        const newProject = {
+            id: targetId,
+            title: titleVal,
+            tagline: taglineVal,
+            category: taglineVal,
+            liveUrl: urlVal,
+            description: descVal,
+            image: imageVal,
+            isFeatured: isFeaturedVal || allProjects.length === 0
+        };
+
+        if (newProject.isFeatured) {
+            allProjects = allProjects.map(p => ({ ...p, isFeatured: false }));
         }
+        allProjects.push(newProject);
+        editingProjectId = targetId;
+    } else {
+        allProjects = allProjects.map(p => {
+            if (p.id === targetId) {
+                return {
+                    ...p,
+                    title: titleVal,
+                    tagline: taglineVal,
+                    category: taglineVal,
+                    liveUrl: urlVal,
+                    description: descVal,
+                    image: imageVal,
+                    isFeatured: isFeaturedVal
+                };
+            }
+            return isFeaturedVal ? { ...p, isFeatured: false } : p;
+        });
+    }
+
+    // Ensure at least one project is featured
+    if (!allProjects.some(p => p.isFeatured)) {
+        allProjects[0].isFeatured = true;
+    }
+
+    const currentFeatured = allProjects.find(p => p.isFeatured) || allProjects[0];
+    const previewLink = document.getElementById('projectPreviewLink');
+    if (previewLink && currentFeatured.liveUrl) {
+        previewLink.href = currentFeatured.liveUrl;
+    }
+
+    const payload = {
+        projects: allProjects,
+        featuredProject: currentFeatured,
+        featuredProjectId: currentFeatured.id
     };
 
     try {
@@ -922,12 +1356,18 @@ async function handleProjectUpdate(e) {
             body: JSON.stringify(payload)
         });
         if (res.ok) {
-            showToast('Project updated successfully');
-            document.getElementById('projectPreviewLink').href = payload.featuredProject.liveUrl;
+            showToast(isNew ? 'New project added successfully' : 'Project updated successfully');
+            localStorage.setItem('whalerex_local_projects', JSON.stringify(allProjects));
+            editProject(targetId);
             return;
         }
-    } catch (e) {}
-    showToast('Project settings saved locally');
+    } catch (e) {
+        console.warn('API error, saving locally:', e);
+    }
+
+    localStorage.setItem('whalerex_local_projects', JSON.stringify(allProjects));
+    showToast(isNew ? 'New project added (local mode)' : 'Project saved (local mode)');
+    editProject(targetId);
 }
 
 async function handleSettingsUpdate(e) {

@@ -1095,11 +1095,11 @@ Featured Project
 
 <div>
 
-<p class="text-[10px] uppercase tracking-[.25em] opacity-70 mb-2">
+<p id="featuredProjectOverlayCategory" class="text-[10px] uppercase tracking-[.25em] opacity-70 mb-2">
     Web Project
 </p>
 
-<h3 class="font-display text-4xl md:text-6xl font-semibold">
+<h3 id="featuredProjectOverlayTitle" class="font-display text-4xl md:text-6xl font-semibold">
     Waffle House
 </h3>
 
@@ -1119,7 +1119,7 @@ Featured Project
 
 <div class="p-7 md:p-12">
 
-<p class="section-label mb-4">
+<p id="featuredProjectCategory" class="section-label mb-4">
     Creative Web Project
 </p>
 
@@ -1129,12 +1129,12 @@ Featured Project
 
 <div>
 
-<h3 class="font-display text-4xl md:text-6xl font-semibold">
+<h3 id="featuredProjectTitle" class="font-display text-4xl md:text-6xl font-semibold">
     Waffle House
 </h3>
 
 
-<p class="text-[#756D64] max-w-xl mt-5 leading-7">
+<p id="featuredProjectDesc" class="text-[#756D64] max-w-xl mt-5 leading-7">
 
 A creative web project built using Antigravity.
 The website provides an interactive experience where visitors
@@ -1156,6 +1156,7 @@ can explore the website and place orders.
 
 
 <a
+    id="featuredProjectLiveBtn"
     href="https://waffle-house-sigma.vercel.app/"
     target="_blank"
     rel="noopener noreferrer"
@@ -2150,6 +2151,45 @@ document
     });
 
 });
+
+/* DYNAMIC FEATURED PROJECT SYNC */
+(function() {
+    fetch('/api/settings')
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(data) {
+        if (!data || !data.settings || !data.settings.featuredProject) return;
+        var p = data.settings.featuredProject;
+        if (p.title) {
+            var t1 = document.getElementById('featuredProjectTitle');
+            var t2 = document.getElementById('featuredProjectOverlayTitle');
+            if (t1) t1.textContent = p.title;
+            if (t2) t2.textContent = p.title;
+        }
+        if (p.tagline || p.category) {
+            var val = p.category || p.tagline;
+            var c1 = document.getElementById('featuredProjectCategory');
+            var c2 = document.getElementById('featuredProjectOverlayCategory');
+            if (c1) c1.textContent = val;
+            if (c2) c2.textContent = val;
+        }
+        if (p.description) {
+            var d = document.getElementById('featuredProjectDesc');
+            if (d) d.textContent = p.description;
+        }
+        if (p.liveUrl) {
+            var btn = document.getElementById('featuredProjectLiveBtn');
+            if (btn) btn.href = p.liveUrl;
+        }
+        if (p.image) {
+            var img = document.getElementById('waffleImage');
+            if (img) {
+                img.src = p.image;
+                img.alt = p.title || 'Featured Project';
+            }
+        }
+    })
+    .catch(function() {});
+})();
 
 </script>
 
